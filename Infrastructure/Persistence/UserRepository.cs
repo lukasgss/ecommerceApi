@@ -1,18 +1,27 @@
 using ecommerceApi.Application.Common.Interfaces;
 using ecommerceApi.Domain.Entities;
+using ecommerceApi.Infrastructure.Persistence.DataContext;
+using Microsoft.EntityFrameworkCore;
 
 namespace ecommerceApi.Infrastructure.Persistence;
 
 public class UserRepository : IUserRepository
 {
-    private static readonly List<User> _users = new();
-    public void Add(User user)
+    private readonly AppDbContext _dbContext;
+
+    public UserRepository(AppDbContext dbContext)
     {
-        _users.Add(user);
+        _dbContext = dbContext;
     }
 
-    public User? GetUserByEmail(string email)
+    public async Task AddAsync(User user)
     {
-        return _users.SingleOrDefault(u => u.Email == email);
+        _dbContext.Add(user);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<User?> GetUserByEmailAsync(string email)
+    {
+        return await _dbContext.Users.SingleOrDefaultAsync(u => u.Email == email);
     }
 }

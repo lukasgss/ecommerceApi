@@ -16,11 +16,11 @@ public class AuthenticationService : IAuthenticationService
         _userRepository = userRepository;
     }
 
-    public AuthenticationResult Register(string firstName, string lastName, string email, string password)
+    public async Task<AuthenticationResult> RegisterAsync(string firstName, string lastName, string email, string password)
     {
-        if (_userRepository.GetUserByEmail(email) is not null)
+        if (await _userRepository.GetUserByEmailAsync(email) is not null)
         {
-            throw new Exception("User with given email already exists.");
+            throw new ConflictException("User with given email already exists.");
         }
 
         var user = new User
@@ -31,7 +31,7 @@ public class AuthenticationService : IAuthenticationService
             Password = password
         };
 
-        _userRepository.Add(user);
+        await _userRepository.AddAsync(user);
 
         var token = _jwtTokenGenerator.GenerateToken(user.Id, firstName, lastName);
 
@@ -43,9 +43,9 @@ public class AuthenticationService : IAuthenticationService
             token);
     }
 
-    public AuthenticationResult Login(string email, string password)
+    public async Task<AuthenticationResult> LoginAsync(string email, string password)
     {
-        var user = _userRepository.GetUserByEmail(email);
+        var user = await _userRepository.GetUserByEmailAsync(email);
         if (user is null || user.Password != password)
         {
             throw new UnauthorizedException("Invalid credentials.");

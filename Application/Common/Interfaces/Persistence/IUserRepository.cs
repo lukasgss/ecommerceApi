@@ -6,6 +6,6 @@ namespace ecommerceApi.Application.Common.Interfaces;
 
 public interface IUserRepository
 {
-    User? GetUserByEmail(string email);
-    void Add(User user);
+    Task<User?> GetUserByEmailAsync(string email);
+    Task AddAsync(User user);
 }

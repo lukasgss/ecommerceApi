@@ -19,7 +19,7 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPost("register")]
-    public ActionResult<AuthenticationResult> Register(RegisterRequest request)
+    public async Task<ActionResult<AuthenticationResult>> Register(RegisterRequest request)
     {
         RegisterRequestValidator registerRequestValidator = new();
         var validationResult = registerRequestValidator.Validate(request);
@@ -29,7 +29,7 @@ public class AuthenticationController : ControllerBase
             return ValidationProblem(modelStateDictionary);
         }
 
-        var authResult = _authenticationService.Register(request.FirstName, request.LastName, request.Email, request.Password);
+        var authResult = await _authenticationService.RegisterAsync(request.FirstName, request.LastName, request.Email, request.Password);
 
         return new AuthenticationResult(
             authResult.Id,
@@ -40,9 +40,9 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPost("login")]
-    public ActionResult<AuthenticationResult> Login(LoginRequest request)
+    public async Task<ActionResult<AuthenticationResult>> Login(LoginRequest request)
     {
-        var response = _authenticationService.Login(request.Email, request.Password);
+        var response = await _authenticationService.LoginAsync(request.Email, request.Password);
 
         return Ok(response);
     }
