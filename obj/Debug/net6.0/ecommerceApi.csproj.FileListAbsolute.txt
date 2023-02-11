@@ -56,3 +56,4 @@
 /home/lucas/Dev/csharp/projects/ecommerceApi/bin/Debug/net6.0/System.Text.Encodings.Web.dll
 /home/lucas/Dev/csharp/projects/ecommerceApi/bin/Debug/net6.0/System.Text.Json.dll
 /home/lucas/Dev/csharp/projects/ecommerceApi/bin/Debug/net6.0/runtimes/browser/lib/net6.0/System.Text.Encodings.Web.dll
+/home/lucas/Dev/csharp/projects/ecommerceApi/bin/Debug/net6.0/AutoMapper.dll
