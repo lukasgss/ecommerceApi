@@ -16,17 +16,17 @@ public class CategoryRepository : ICategoryRepository
 
     public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
     {
-        return await _dbContext.Categories.AsNoTracking().ToListAsync();
+        return await _dbContext.Categories.AsNoTracking().Include(c => c.Products).ToListAsync();
     }
 
     public async Task<Category?> GetCategoryByIdAsync(Guid id)
     {
-        return await _dbContext.Categories.AsNoTracking().SingleOrDefaultAsync(c => c.Id == id);
+        return await _dbContext.Categories.AsNoTracking().Include(c => c.Products).SingleOrDefaultAsync(c => c.Id == id);
     }
 
     public async Task<Category?> GetCategoryByNameAsync(string name)
     {
-        return await _dbContext.Categories.AsNoTracking().SingleOrDefaultAsync(c => c.Name == name);
+        return await _dbContext.Categories.AsNoTracking().Include(c => c.Products).SingleOrDefaultAsync(c => c.Name == name);
     }
 
     public void AddCategory(Category category)

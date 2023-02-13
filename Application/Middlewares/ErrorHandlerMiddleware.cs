@@ -43,12 +43,17 @@ public class ErrorHandlerMiddleware
                 statusCode = HttpStatusCode.NotFound;
                 message = exception.Message;
                 break;
+            case BadRequestException:
+                statusCode = HttpStatusCode.BadRequest;
+                message = exception.Message;
+                break;
             default:
                 statusCode = HttpStatusCode.InternalServerError;
                 message = "Internal server error, try again later.";
                 break;
         }
 
+        Console.WriteLine(exception);
         return context.Response.WriteAsync(JsonSerializer.Serialize(new { statusCode, message }));
     }
 }

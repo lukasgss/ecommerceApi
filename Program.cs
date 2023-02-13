@@ -1,9 +1,11 @@
+using System.Text.Json.Serialization;
 using AutoMapper;
 using ecommerceApi.Application.Common;
 using ecommerceApi.Application.Common.Interfaces;
 using ecommerceApi.Application.Common.Interfaces.Authentication;
 using ecommerceApi.Application.Common.Interfaces.Persistence;
 using ecommerceApi.Application.Common.Interfaces.Persistence.Categories;
+using ecommerceApi.Application.Common.Interfaces.Persistence.Products;
 using ecommerceApi.Application.Extensions;
 using ecommerceApi.Application.Middlewares;
 using ecommerceApi.Application.Services.Authentication;
@@ -21,9 +23,12 @@ IMapper mapper = mappingConfig.CreateMapper();
 
 var builder = WebApplication.CreateBuilder(args);
 {
-    builder.Services.AddControllers();
+    builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+
 
     builder.Services.AddSingleton(mapper);
 
@@ -33,6 +38,8 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
     builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
     builder.Services.AddScoped<ICategoryService, CategoryService>();
+    builder.Services.AddScoped<IProductService, ProductService>();
+    builder.Services.AddScoped<IProductRepository, ProductRepository>();
     builder.Services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 
     builder.Services.AddValidatorsFromAssemblyContaining<IAssemblyMarker>();

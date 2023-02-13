@@ -2,6 +2,7 @@ using AutoMapper;
 using ecommerceApi.Application.Common.Exceptions;
 using ecommerceApi.Application.Common.Interfaces.Persistence;
 using ecommerceApi.Application.Common.Interfaces.Persistence.Categories;
+using ecommerceApi.Application.Common.Interfaces.Persistence.Products;
 using ecommerceApi.Domain.Entities;
 
 namespace ecommerceApi.Application.Services.Entities;
@@ -34,10 +35,11 @@ public class CategoryService : ICategoryService
         _categoryRepository.AddCategory(category);
         await _unitOfWork.CommitAsync();
 
+        var categoryProducts = _mapper.Map<List<CategoryRelatedProductResponse>>(category.Products);
         return new CategoryResponse(
             category.Id,
             category.Name,
-            category.Products);
+            categoryProducts);
     }
 
     public async Task DeleteCategoryByIdAsync(Guid id)
@@ -69,14 +71,14 @@ public class CategoryService : ICategoryService
         _categoryRepository.UpdateCategory(categoryEdit);
         await _unitOfWork.CommitAsync();
 
-        return new CategoryResponse(categoryEdit.Id, categoryEdit.Name, categoryEdit.Products);
+        var categoryProducts = _mapper.Map<List<CategoryRelatedProductResponse>>(categoryEdit.Products);
+        return new CategoryResponse(categoryEdit.Id, categoryEdit.Name, categoryProducts);
     }
 
     public async Task<IEnumerable<CategoryResponse>> GetAllCategoriesAsync()
     {
         var categories = await _categoryRepository.GetAllCategoriesAsync();
-        var categoriesResponse = _mapper.Map<List<CategoryResponse>>(categories);
-        return new List<CategoryResponse>(categoriesResponse);
+        return _mapper.Map<List<CategoryResponse>>(categories);
     }
 
     public async Task<CategoryResponse?> GetCategoryByIdAsync(Guid id)
