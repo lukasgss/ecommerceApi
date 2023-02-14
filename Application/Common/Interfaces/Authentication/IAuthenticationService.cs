@@ -4,6 +4,6 @@ namespace ecommerceApi.Application.Common.Interfaces.Authentication;
 
 public interface IAuthenticationService
 {
-    Task<AuthenticationResult> RegisterAsync(string firstName, string lastName, string email, string password);
+    Task<AuthenticationResult> RegisterAsync(RegisterRequest request);
     Task<AuthenticationResult> LoginAsync(string email, string password);
 }

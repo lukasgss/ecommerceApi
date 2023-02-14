@@ -29,7 +29,7 @@ public class AuthenticationController : ControllerBase
             return ValidationProblem(modelStateDictionary);
         }
 
-        var authResult = await _authenticationService.RegisterAsync(request.FirstName, request.LastName, request.Email, request.Password);
+        var authResult = await _authenticationService.RegisterAsync(request);
 
         return new AuthenticationResult(
             authResult.Id,
