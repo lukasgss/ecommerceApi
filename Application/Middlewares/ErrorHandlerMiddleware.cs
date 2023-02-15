@@ -25,7 +25,7 @@ public class ErrorHandlerMiddleware
         }
     }
 
-    private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         HttpStatusCode statusCode;
         string message;
@@ -58,6 +58,8 @@ public class ErrorHandlerMiddleware
         }
 
         Console.WriteLine(exception);
-        return context.Response.WriteAsync(JsonSerializer.Serialize(new { statusCode, message }));
+
+        context.Response.StatusCode = (int)statusCode;
+        await context.Response.WriteAsync(JsonSerializer.Serialize(new { statusCode, message }));
     }
 }
