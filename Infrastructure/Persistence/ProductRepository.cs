@@ -21,7 +21,7 @@ public class ProductRepository : IProductRepository
 
     public async Task<Product?> GetProductByIdAsync(Guid id)
     {
-        return await _dbContext.Products.AsNoTracking().SingleOrDefaultAsync(p => p.Id == id);
+        return await _dbContext.Products.AsNoTracking().Include(p => p.ProductReviews).SingleOrDefaultAsync(p => p.Id == id);
     }
 
     public void AddProduct(Product product)
@@ -38,5 +38,4 @@ public class ProductRepository : IProductRepository
     {
         _dbContext.Products.Remove(product);
     }
-
 }

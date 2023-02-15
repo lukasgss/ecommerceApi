@@ -1,7 +1,9 @@
 using AutoMapper;
 using ecommerceApi.Application.Common.Exceptions;
 using ecommerceApi.Application.Common.Interfaces.Persistence;
+using ecommerceApi.Application.Common.Interfaces.Persistence.ProductReviews;
 using ecommerceApi.Application.Common.Interfaces.Persistence.Products;
+using ecommerceApi.Application.Common.Interfaces.Persistence.Productse;
 using ecommerceApi.Domain.Entities;
 
 namespace ecommerceApi.Application.Services.Entities;
@@ -20,23 +22,32 @@ public class ProductService : IProductService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<IEnumerable<ProductResponse>> GetAllProductsAsync()
+    public async Task<IEnumerable<GetAllProductsResponse>> GetAllProductsAsync()
     {
         var products = await _productRepository.GetAllProductsAsync();
-        return _mapper.Map<List<ProductResponse>>(products);
+        return _mapper.Map<List<GetAllProductsResponse>>(products);
     }
 
-    public async Task<ProductResponse> GetProductByIdAsync(Guid id)
+    public async Task<GetProductResponse> GetProductByIdAsync(Guid id)
     {
         var product = await _productRepository.GetProductByIdAsync(id);
         if (product is null)
         {
             throw new NotFoundException("Product with the specified ID does not exist.");
         }
-        return _mapper.Map<ProductResponse>(product);
+
+        var productRelatedReviews = _mapper.Map<List<ProductRelatedReviews>>(product.ProductReviews);
+        return new GetProductResponse(
+            product.Id,
+            product.Name,
+            product.Description,
+            product.Image,
+            product.Price,
+            product.CategoryId,
+            productRelatedReviews);
     }
 
-    public async Task<ProductResponse> AddProductAsync(CreateProductRequest productRequest)
+    public async Task<GetProductResponse> AddProductAsync(CreateProductRequest productRequest)
     {
         var category = await _categoryRepository.GetCategoryByIdAsync(productRequest.CategoryId);
         if (category is null)
@@ -48,10 +59,10 @@ public class ProductService : IProductService
         _productRepository.AddProduct(product);
         await _unitOfWork.CommitAsync();
 
-        return _mapper.Map<ProductResponse>(product);
+        return _mapper.Map<GetProductResponse>(product);
     }
 
-    public async Task<ProductResponse> EditProductAsync(EditProductRequest productRequest)
+    public async Task<GetProductResponse> EditProductAsync(EditProductRequest productRequest)
     {
         var product = await _productRepository.GetProductByIdAsync(productRequest.Id);
         if (product is null)
@@ -69,7 +80,7 @@ public class ProductService : IProductService
         _productRepository.EditProduct(productEdit);
         await _unitOfWork.CommitAsync();
 
-        return _mapper.Map<ProductResponse>(productEdit);
+        return _mapper.Map<GetProductResponse>(productEdit);
     }
 
     public async Task DeleteProduct(Guid id)

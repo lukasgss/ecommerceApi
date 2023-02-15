@@ -1,4 +1,5 @@
 using ecommerceApi.Application.Common.Interfaces.Persistence.Products;
+using ecommerceApi.Application.Common.Interfaces.Persistence.Productse;
 using ecommerceApi.Application.Services.FailedValidation;
 using ecommerceApi.Application.Validation.Product;
 using Microsoft.AspNetCore.Mvc;
@@ -17,21 +18,21 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ProductResponse>>> GetAllProducts()
+    public async Task<ActionResult<IEnumerable<GetAllProductsResponse>>> GetAllProducts()
     {
         var products = await _productService.GetAllProductsAsync();
         return Ok(products);
     }
 
     [HttpGet("{id:guid}", Name = "GetProductById")]
-    public async Task<ActionResult<ProductResponse>> GetProductById(Guid id)
+    public async Task<ActionResult<GetProductResponse>> GetProductById(Guid id)
     {
         var product = await _productService.GetProductByIdAsync(id);
         return Ok(product);
     }
 
     [HttpPost]
-    public async Task<ActionResult<ProductResponse>> CreateProduct(CreateProductRequest request)
+    public async Task<ActionResult<GetProductResponse>> CreateProduct(CreateProductRequest request)
     {
         CreateProductValidator requestValidator = new();
         var validationResult = requestValidator.Validate(request);
@@ -47,7 +48,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<ActionResult<ProductResponse>> EditProduct(EditProductRequest request)
+    public async Task<ActionResult<GetProductResponse>> EditProduct(EditProductRequest request)
     {
         EditProductValidator requestValidator = new();
         var validationResult = requestValidator.Validate(request);

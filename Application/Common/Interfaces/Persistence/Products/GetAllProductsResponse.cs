@@ -1,12 +1,9 @@
-using ecommerceApi.Domain.Entities;
-
 namespace ecommerceApi.Application.Common.Interfaces.Persistence.Products;
 
-public record ProductResponse(
+public record GetAllProductsResponse(
     Guid Id,
     string Name,
     string Description,
     string Image,
     decimal Price,
-    Guid CategoryId,
-    ICollection<ProductReview>? ProductReviews);
+    Guid CategoryId);

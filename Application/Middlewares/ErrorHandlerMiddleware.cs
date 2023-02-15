@@ -47,6 +47,10 @@ public class ErrorHandlerMiddleware
                 statusCode = HttpStatusCode.BadRequest;
                 message = exception.Message;
                 break;
+            case ForbiddenException:
+                statusCode = HttpStatusCode.Forbidden;
+                message = exception.Message;
+                break;
             default:
                 statusCode = HttpStatusCode.InternalServerError;
                 message = "Internal server error, try again later.";

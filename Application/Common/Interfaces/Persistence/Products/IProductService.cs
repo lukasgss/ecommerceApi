@@ -1,12 +1,12 @@
-using ecommerceApi.Domain.Entities;
+using ecommerceApi.Application.Common.Interfaces.Persistence.Productse;
 
 namespace ecommerceApi.Application.Common.Interfaces.Persistence.Products;
 
 public interface IProductService
 {
-    Task<IEnumerable<ProductResponse>> GetAllProductsAsync();
-    Task<ProductResponse> GetProductByIdAsync(Guid id);
-    Task<ProductResponse> AddProductAsync(CreateProductRequest productRequest);
-    Task<ProductResponse> EditProductAsync(EditProductRequest productRequest);
+    Task<IEnumerable<GetAllProductsResponse>> GetAllProductsAsync();
+    Task<GetProductResponse> GetProductByIdAsync(Guid id);
+    Task<GetProductResponse> AddProductAsync(CreateProductRequest productRequest);
+    Task<GetProductResponse> EditProductAsync(EditProductRequest productRequest);
     Task DeleteProduct(Guid id);
 }

@@ -31,16 +31,16 @@ public class AppDbContext : DbContext
         product.Property(p => p.Name).IsRequired().HasMaxLength(255);
         product.Property(p => p.Description).IsRequired().HasMaxLength(1000);
         product.Property(p => p.Image).IsRequired().HasMaxLength(1000);
-        product.Property(p => p.Price).IsRequired().HasColumnType("decimal(6, 2)");
+        product.Property(p => p.Price).IsRequired().HasColumnType("decimal(12, 2)");
 
         var productReview = modelBuilder.Entity<ProductReview>();
         productReview.ToTable("ProductReviews");
         productReview.Property(p => p.Title).IsRequired().HasMaxLength(255);
         productReview.Property(p => p.Content).IsRequired().HasMaxLength(255);
-        productReview.Property(p => p.Rating).IsRequired();
+        productReview.Property(p => p.Rating).IsRequired().HasColumnType("decimal(6, 1)");
         productReview.Property(p => p.DateOfReview).IsRequired();
         productReview.Property(p => p.RecommendsProduct).IsRequired();
-        productReview.Property(p => p.GeneralQualityRating).IsRequired();
-        productReview.Property(p => p.CostBenefitRating).IsRequired();
+        productReview.Property(p => p.GeneralQualityRating).IsRequired().HasColumnType("decimal(6, 1)");
+        productReview.Property(p => p.CostBenefitRating).IsRequired().HasColumnType("decimal(6, 1)");
     }
 }

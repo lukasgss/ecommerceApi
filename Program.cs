@@ -1,14 +1,18 @@
+using System.Text;
 using System.Text.Json.Serialization;
 using AutoMapper;
 using ecommerceApi.Application.Common;
 using ecommerceApi.Application.Common.Interfaces;
 using ecommerceApi.Application.Common.Interfaces.Authentication;
+using ecommerceApi.Application.Common.Interfaces.Authorization;
 using ecommerceApi.Application.Common.Interfaces.Persistence;
 using ecommerceApi.Application.Common.Interfaces.Persistence.Categories;
+using ecommerceApi.Application.Common.Interfaces.Persistence.ProductReviews;
 using ecommerceApi.Application.Common.Interfaces.Persistence.Products;
 using ecommerceApi.Application.Extensions;
 using ecommerceApi.Application.Middlewares;
 using ecommerceApi.Application.Services.Authentication;
+using ecommerceApi.Application.Services.Authorization;
 using ecommerceApi.Application.Services.Entities;
 using ecommerceApi.Infrastructure.Authentication;
 using ecommerceApi.Infrastructure.Persistence;
@@ -17,6 +21,7 @@ using ecommerceApi.Infrastructure.Persistence.Mappings;
 using ecommerceApi.Infrastructure.Persistence.UnitOfWork;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var mappingConfig = new MapperConfiguration(mc => mc.AddProfile(new MappingProfile()));
 IMapper mapper = mappingConfig.CreateMapper();
@@ -29,7 +34,6 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
 
-
     builder.Services.AddSingleton(mapper);
 
     builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -41,9 +45,28 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddScoped<ICategoryService, CategoryService>();
     builder.Services.AddScoped<IProductService, ProductService>();
     builder.Services.AddScoped<IProductRepository, ProductRepository>();
+    builder.Services.AddScoped<IProductReviewRepository, ProductReviewRepository>();
+    builder.Services.AddScoped<IProductReviewService, ProductReviewService>();
+    builder.Services.AddScoped<IUserAuthorizationService, UserAuthorizationService>();
     builder.Services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 
     builder.Services.AddValidatorsFromAssemblyContaining<IAssemblyMarker>();
+
+    builder.Services.AddAuthentication("Bearer")
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new()
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = builder.Configuration["AppSettings:Issuer"],
+                ValidAudience = builder.Configuration["AppSettings:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:SecretKey"]))
+            };
+        }
+    );
 }
 
 var app = builder.Build();
@@ -60,6 +83,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
