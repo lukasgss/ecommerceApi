@@ -6,7 +6,7 @@ public class ProductReview
     public string Title { get; set; } = null!;
     public string Content { get; set; } = null!;
     public decimal Rating { get; set; }
-    public DateOnly DateOfReview { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+    public DateOnly DateOfReview { get; set; } = DateOnly.FromDateTime(DateTime.UtcNow);
     public bool RecommendsProduct { get; set; }
     public decimal GeneralQualityRating { get; set; }
     public decimal CostBenefitRating { get; set; }

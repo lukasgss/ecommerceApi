@@ -1,5 +1,8 @@
 using AutoMapper;
 using ecommerceApi.Application.Common.Interfaces.Persistence.Categories;
+using ecommerceApi.Application.Common.Interfaces.Persistence.Items;
+using ecommerceApi.Application.Common.Interfaces.Persistence.Orders;
+using ecommerceApi.Application.Common.Interfaces.Persistence.OrdersStatus;
 using ecommerceApi.Application.Common.Interfaces.Persistence.ProductReviews;
 using ecommerceApi.Application.Common.Interfaces.Persistence.Products;
 using ecommerceApi.Application.Common.Interfaces.Persistence.Productse;
@@ -26,5 +29,12 @@ public class MappingProfile : Profile
         CreateMap<ProductReviewResponse, ProductReview>().ReverseMap();
         CreateMap<CreateProductReviewRequest, ProductReview>().ReverseMap();
         CreateMap<ProductReview, ProductRelatedReviews>().ReverseMap();
+
+        CreateMap<ItemRequest, Item>().ReverseMap();
+        CreateMap<ItemResponse, Item>().ReverseMap();
+
+        CreateMap<Order, OrderRequest>().ReverseMap();
+        CreateMap<Order, OrderResponse>().ReverseMap();
+        CreateMap<OrderStatus, OrderStatusResponse>().ReverseMap();
     }
 }

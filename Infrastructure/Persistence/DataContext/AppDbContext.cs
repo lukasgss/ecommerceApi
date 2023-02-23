@@ -11,6 +11,9 @@ public class AppDbContext : DbContext
     public DbSet<Product> Products { get; set; } = null!;
     public DbSet<Category> Categories { get; set; } = null!;
     public DbSet<ProductReview> ProductReviews { get; set; } = null!;
+    public DbSet<Order> Orders { get; set; } = null!;
+    public DbSet<Item> Items { get; set; } = null!;
+    public DbSet<OrderStatus> OrderStatus { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -42,5 +45,19 @@ public class AppDbContext : DbContext
         productReview.Property(p => p.RecommendsProduct).IsRequired();
         productReview.Property(p => p.GeneralQualityRating).IsRequired().HasColumnType("decimal(6, 1)");
         productReview.Property(p => p.CostBenefitRating).IsRequired().HasColumnType("decimal(6, 1)");
+
+        var order = modelBuilder.Entity<Order>();
+        order.ToTable("Orders");
+        order.Property(p => p.Price).IsRequired().HasColumnType("decimal(12,2)");
+        order.Property(p => p.ShippingAddress).IsRequired().HasMaxLength(255);
+
+        var orderStatus = modelBuilder.Entity<OrderStatus>();
+        orderStatus.Property(p => p.Status).IsRequired().HasMaxLength(255);
+        orderStatus.Property(p => p.Time).HasColumnType("timestamp with time zone");
+
+        var item = modelBuilder.Entity<Item>();
+        item.ToTable("Items");
+        item.Property(p => p.Quantity).IsRequired();
+        item.Property(p => p.Price).IsRequired().HasColumnType("decimal(12, 2)");
     }
 }

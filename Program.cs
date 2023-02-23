@@ -7,6 +7,9 @@ using ecommerceApi.Application.Common.Interfaces.Authentication;
 using ecommerceApi.Application.Common.Interfaces.Authorization;
 using ecommerceApi.Application.Common.Interfaces.Persistence;
 using ecommerceApi.Application.Common.Interfaces.Persistence.Categories;
+using ecommerceApi.Application.Common.Interfaces.Persistence.Items;
+using ecommerceApi.Application.Common.Interfaces.Persistence.Orders;
+using ecommerceApi.Application.Common.Interfaces.Persistence.OrdersStatus;
 using ecommerceApi.Application.Common.Interfaces.Persistence.ProductReviews;
 using ecommerceApi.Application.Common.Interfaces.Persistence.Products;
 using ecommerceApi.Application.Extensions;
@@ -48,9 +51,16 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddScoped<IProductReviewRepository, ProductReviewRepository>();
     builder.Services.AddScoped<IProductReviewService, ProductReviewService>();
     builder.Services.AddScoped<IUserAuthorizationService, UserAuthorizationService>();
+    builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+    builder.Services.AddScoped<IOrderService, OrderService>();
+    builder.Services.AddScoped<IOrderStatusRepository, OrderStatusRepository>();
+    builder.Services.AddScoped<IItemRepository, ItemRepository>();
+
     builder.Services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 
     builder.Services.AddValidatorsFromAssemblyContaining<IAssemblyMarker>();
+
+    builder.Services.AddHttpClient();
 
     builder.Services.AddAuthentication("Bearer")
         .AddJwtBearer(options =>

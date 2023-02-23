@@ -14,7 +14,11 @@ public class AuthenticationService : IAuthenticationService
     private readonly IPasswordService _passwordService;
     private readonly IUnitOfWork _unitOfWork;
 
-    public AuthenticationService(IJwtTokenGenerator jwtTokenGenerator, IUserRepository userRepository, IMapper mapper, IPasswordService passwordService, IUnitOfWork unitOfWork)
+    public AuthenticationService(
+        IJwtTokenGenerator jwtTokenGenerator,
+        IUserRepository userRepository,
+        IPasswordService passwordService,
+        IUnitOfWork unitOfWork)
     {
         _jwtTokenGenerator = jwtTokenGenerator;
         _userRepository = userRepository;

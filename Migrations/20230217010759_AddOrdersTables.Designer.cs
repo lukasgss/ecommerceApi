@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ecommerceApi.Infrastructure.Persistence.DataContext;
@@ -11,9 +12,11 @@ using ecommerceApi.Infrastructure.Persistence.DataContext;
 namespace ecommerceApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230217010759_AddOrdersTables")]
+    partial class AddOrdersTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,7 +65,7 @@ namespace ecommerceApi.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Items", (string)null);
+                    b.ToTable("Item");
                 });
 
             modelBuilder.Entity("ecommerceApi.Domain.Entities.Order", b =>
@@ -107,7 +110,7 @@ namespace ecommerceApi.Migrations
                         .HasColumnType("character varying(255)");
 
                     b.Property<DateTime>("Time")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
