@@ -55,6 +55,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddScoped<IOrderService, OrderService>();
     builder.Services.AddScoped<IOrderStatusRepository, OrderStatusRepository>();
     builder.Services.AddScoped<IItemRepository, ItemRepository>();
+    builder.Services.AddScoped<IOrderStatusService, OrderStatusService>();
 
     builder.Services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 

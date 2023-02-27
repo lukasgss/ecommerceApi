@@ -36,5 +36,8 @@ public class MappingProfile : Profile
         CreateMap<Order, OrderRequest>().ReverseMap();
         CreateMap<Order, OrderResponse>().ReverseMap();
         CreateMap<OrderStatus, OrderStatusResponse>().ReverseMap();
+        CreateMap<OrderResponse, OrderStatusResponse>().ReverseMap();
+
+        CreateMap<OrderStatusRequest, OrderStatus>();
     }
 }
